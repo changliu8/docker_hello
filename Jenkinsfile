@@ -1,11 +1,17 @@
-pipeline {
-    agent { docker { image 'python:3.13.3-alpine3.21' } }
-    stages {
-        stage('build') {
-            steps {
-                sh 'python --version'
-				sh 'python hello.py'
+    pipeline {
+        agent { dockerfile true }
+        stages {
+            stage('Build') {
+                steps {
+                    echo "Building Docker image..."
+                    bat 'docker build -t my-python-app .'
+                }
+            }
+            stage('Run') {
+                steps {
+                    echo "Running Docker container..."
+                    bat 'docker run my-python-app'
+                }
             }
         }
     }
-}
