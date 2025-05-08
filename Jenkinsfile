@@ -1,16 +1,21 @@
     pipeline {
-        agent { dockerfile true }
+        agent {
+            docker {
+                image 'python:3.9-slim'
+				args '-u 0'
+            }
+        }
         stages {
             stage('Build') {
                 steps {
-                    echo "Building Docker image..."
+                    echo 'Building the Docker image...'
                     bat 'docker build -t my-python-app .'
                 }
             }
             stage('Run') {
                 steps {
-                    echo "Running Docker container..."
-                    bat 'docker run my-python-app'
+                    echo 'Running the Python script...'
+                    bat 'python hello.py'
                 }
             }
         }
