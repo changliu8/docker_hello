@@ -1,19 +1,27 @@
-    pipeline {
-        agent { 
-            docker { 
-                image 'python-app-image' 
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone') {
+            steps {
+                git 'https://github.com/changliu8/docker_hello.git'
             }
         }
-        stages {
-            stage('Build') {
-                steps {
-                    bat 'docker build -t python-app-image .'
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    docker.build('hello-image')
                 }
             }
-            stage('Run') {
-                steps {
-                   bat 'python hello.py'
+        }
+
+        stage('Run Docker Container') {
+            steps {
+                script {
+                    docker.image('hello-image').run()
                 }
             }
         }
     }
+}
